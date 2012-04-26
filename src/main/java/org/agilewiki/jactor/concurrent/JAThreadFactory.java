@@ -24,11 +24,23 @@
 package org.agilewiki.jactor.concurrent;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * JAThreadFactory is used to create threads.
  */
 final public class JAThreadFactory implements ThreadFactory {
+
+    /**
+     * Base name for thread
+     */
+    private final String baseName;
+
+    private final AtomicInteger threadCount = new AtomicInteger(0);
+
+    public JAThreadFactory(String baseName) {
+        this.baseName = baseName;
+    }
 
     /**
      * The newThread method returns a newly created Thread.
@@ -37,6 +49,8 @@ final public class JAThreadFactory implements ThreadFactory {
      */
     @Override
     public Thread newThread(Runnable runnable) {
-        return new Thread(runnable);
+        Thread t = new Thread(runnable);
+        t.setName(baseName + "-" + threadCount.incrementAndGet());
+        return t;
     }
 }
