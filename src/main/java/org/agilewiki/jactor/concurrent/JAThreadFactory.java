@@ -29,6 +29,7 @@ import java.util.concurrent.ThreadFactory;
  * JAThreadFactory is used to create threads.
  */
 final public class JAThreadFactory implements ThreadFactory {
+
     /**
      * The newThread method returns a newly created Thread.
      *

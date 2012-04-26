@@ -48,10 +48,32 @@ public interface MailboxFactory {
      *
      * @return A new asynchronous mailbox.
      */
+    Mailbox createAsyncMailbox(int maxSize);
+
+    /**
+     * Create a mailbox.
+     *
+     * @return A new mailbox.
+     */
+    Mailbox createMailbox(int maxSize);
+
+    /**
+     * Create an asynchronous mailbox.
+     *
+     * @return A new asynchronous mailbox.
+     */
     Mailbox createAsyncMailbox();
 
     /**
      * Stop all the threads as they complete their tasks.
      */
     public void close();
+
+    /**
+     * Get default mailbox size
+     *
+     * @return a mailbox size
+     */
+    int getMailboxSize();
+
 }

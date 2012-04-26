@@ -36,10 +36,11 @@ final public class JLPCMailbox extends JAPCMailbox implements Mailbox {
      * @param mailboxFactory Provides a thread for processing dispatched events.
      * @param async          Set to true when requests from other mailboxes
      *                       are to be processed asynchronously.
+     * @param maxSize        Maximum size of mailbox. 0 for unlimited
      */
     public JLPCMailbox(final MailboxFactory mailboxFactory,
-                       final boolean async) {
-        super(mailboxFactory.getThreadManager(), async);
+                       final boolean async, final int maxSize) {
+        super(mailboxFactory.getThreadManager(), async, maxSize);
         this.mailboxFactory = mailboxFactory;
     }
 
@@ -49,7 +50,7 @@ final public class JLPCMailbox extends JAPCMailbox implements Mailbox {
      * @param mailboxFactory Provides a thread for processing dispatched events.
      */
     public JLPCMailbox(final MailboxFactory mailboxFactory) {
-        this(mailboxFactory, false);
+        this(mailboxFactory, false, mailboxFactory.getMailboxSize());
     }
 
     /**

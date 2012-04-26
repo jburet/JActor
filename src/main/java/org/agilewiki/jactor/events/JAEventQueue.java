@@ -25,7 +25,9 @@ package org.agilewiki.jactor.events;
 
 import org.agilewiki.jactor.concurrent.ThreadManager;
 
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -58,7 +60,7 @@ final public class JAEventQueue<E> implements EventQueue<E> {
     /**
      * A queue of pending events.
      */
-    private ConcurrentLinkedQueue<E> queue = new ConcurrentLinkedQueue<E>();
+    private LinkedBlockingQueue<E> queue;
 
     /**
      * Set to null when idle, set to this when under internal control,
@@ -97,9 +99,14 @@ final public class JAEventQueue<E> implements EventQueue<E> {
      * @param threadManager Provides a thread for processing dispatched events.
      * @param autonomous    Inhibits the acquireControl operation when true.
      */
-    public JAEventQueue(ThreadManager threadManager, boolean autonomous) {
+    public JAEventQueue(ThreadManager threadManager, boolean autonomous, int maxSize) {
         this.threadManager = threadManager;
         this.autonomous = autonomous;
+        if (maxSize > 0) {
+            this.queue = new LinkedBlockingQueue<E>(maxSize);
+        } else {
+            this.queue = new LinkedBlockingQueue<E>();
+        }
     }
 
     /**
@@ -185,7 +192,11 @@ final public class JAEventQueue<E> implements EventQueue<E> {
      */
     @Override
     public void putEvent(E event) {
-        queue.offer(event);
+        try {
+            queue.put(event);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         notEmpty = true;
         if (atomicControl.get() == null)
             threadManager.process(task);

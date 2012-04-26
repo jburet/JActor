@@ -91,9 +91,10 @@ final public class JABufferedEventsQueue<E>
      *
      * @param threadManager Provides a thread for processing dispatched events.
      * @param autonomous    Inhibits the acquireControl operation when true.
+     * @param maxSize       Maximun event in queue. Use 0 for unlimited
      */
-    public JABufferedEventsQueue(ThreadManager threadManager, boolean autonomous) {
-        this(new JAEventQueue<ArrayList<E>>(threadManager, autonomous));
+    public JABufferedEventsQueue(ThreadManager threadManager, boolean autonomous, int maxSize) {
+        this(new JAEventQueue<ArrayList<E>>(threadManager, autonomous, maxSize));
     }
 
     /**

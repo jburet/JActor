@@ -96,9 +96,10 @@ public class JAPCMailbox implements APCMailbox {
      *
      * @param threadManager Provides a thread for processing dispatched events.
      * @param autonomous    Inhibits the acquireControl operation when true.
+     * @param maxSize       Maximum size of mailbox. 0 for unlimited
      */
-    public JAPCMailbox(ThreadManager threadManager, boolean autonomous) {
-        this(new JABufferedEventsQueue<JAMessage>(threadManager, autonomous));
+    public JAPCMailbox(ThreadManager threadManager, boolean autonomous, int maxSize) {
+        this(new JABufferedEventsQueue<JAMessage>(threadManager, autonomous, maxSize));
     }
 
     /**
